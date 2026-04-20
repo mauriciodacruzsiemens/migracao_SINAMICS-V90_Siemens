@@ -12,7 +12,11 @@
     <!-- HEADER -->
     <div class="header">
         <div class="header-left">
-            <div class="header-logo"> <span>SIEMENS</span></div>
+            <div class="header-logo">
+                <a href="#" onclick="goHome()">
+                    <span>SIEMENS</span>
+                </a>
+            </div>
             <div class="header-title">Configurador de Migração SINAMICS V90 → S200</div>
         </div>
         <div class="progress-section">
@@ -190,15 +194,17 @@
                             <button type="button" class="btn btn-secondary" onclick="goBack()">
                                 <i class="fas fa-arrow-left"></i> Voltar
                             </button>
-                           <span class="btn-text">
-                                    Identificar Sucessor <i class="fas fa-search"></i>
-                                </span>
-
-                                <span class="btn-loading">
-                                    <span class="spinner"></span>
-                                    Processando
-                                </span>
+                            <button type="submit" class="btn" id="search-btn">
+                            <span class="btn-text">
+                                Identificar Sucessor
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <span class="btn-loading" style="display: none;">
+                                <span class="spinner"></span>
+                                Processando
+                            </span>
                             </button>
+                           
                         </div>
                     </form>
                 </div>
