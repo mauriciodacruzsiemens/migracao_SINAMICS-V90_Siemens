@@ -47,6 +47,22 @@
     });
 }
 
+
+        function goHome() {
+    appState = {
+        mode: null,
+        motorV90: null,
+        driveV90: null,
+        motorS200: null,
+        driveS200: null,
+        communication: null,
+        warnings: [],
+        currentStep: 1
+    };
+
+    showPage('page-selection', 1);
+}
+
     function showPage(pageId, stepNum = null) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
@@ -154,62 +170,75 @@
         goBack();
     }
 
-    async function handleSearch(event) {
+async function handleSearch(event) {
         event.preventDefault();
 
-        const errorDiv = document.getElementById('input-error');
-        errorDiv.classList.remove('show');
+        const btn = document.getElementById("search-btn");
+        const btnText = btn.querySelector(".btn-text");
+        const btnLoading = btn.querySelector(".btn-loading");
+        const errorDiv = document.getElementById("input-error");
+
+        // 👇 Controle manual de visibilidade
+        const setLoading = (isLoading) => {
+            btn.disabled = isLoading;
+            btnText.style.display = isLoading ? "none" : "inline-flex";
+            btnLoading.style.display = isLoading ? "inline-flex" : "none";
+        };
+
+        errorDiv.classList.remove("show");
+        setLoading(true); // 👈 Ativa loading
+
+        await new Promise(resolve =>
+            requestAnimationFrame(() => requestAnimationFrame(resolve))
+        );
 
         try {
-                const motor = validateMotor();
-                const drive = validateDrive();
-
+            const motor = validateMotor();
+            const drive = validateDrive();
             let comunicacao = null;
 
-            if (appState.mode === 'motor') {
-                const radio = document.querySelector('input[name="communication"]:checked');
-                if (!radio) throw new Error("Selecione a comunicação");
-                comunicacao = radio.value;
+            if (appState.mode === "motor") {
+            const radio = document.querySelector('input[name="communication"]:checked');
+            if (!radio) throw new Error("Selecione a comunicação");
+            comunicacao = radio.value;
             }
 
-           const response = await fetch("https://migracao-sinamics-v90-siemens.onrender.com/migrar", {
+            const response = await fetch(
+            "https://migracao-sinamics-v90-siemens.onrender.com/migrar",
+            {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    motor: motor,
-                    drive: drive || null,
-                    comunicacao: comunicacao
-                })
-            });
+                motor: motor,
+                drive: drive || null,
+                comunicacao: comunicacao,
+                }),
+            }
+            );
 
             const data = await response.json();
 
             if (!data || !data.atual || !data.sucessor) {
-            showPage('page-error', 3);
+            showPage("page-error", 3);
             return;
+            }
 
-            
-}
-
-            // CORREÇÃO: Usar data.data.melhor_opcao em vez de data.sucessor
             appState.motorV90 = data.atual;
             appState.motorS200 = data.sucessor;
             appState.communication = data.atual.comunicacao;
             appState.warnings = data.desvios || [];
 
             displayResult();
-            showPage('page-result', 3);
-
+            showPage("page-result", 3);
         } catch (error) {
-            errorDiv.textContent = '❌ ' + error.message;
-            errorDiv.classList.add('show');
+            errorDiv.textContent = "❌ " + error.message;
+            errorDiv.classList.add("show");
+        } finally {
+            setLoading(false); // 👈 Desativa loading sempre
         }
-        finally {
-        btn.classList.remove("loading");
         }
-    }
+
+    
 
     function exportToExcel() {
         const { motorV90, motorS200 } = appState;
