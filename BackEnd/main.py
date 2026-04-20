@@ -53,8 +53,8 @@ def normalize_phases(p):
     return phases
 
 
-def classify_encoder(enc):
-    """Classifica tipo de encoder em categorias padrão."""
+def classify_(enc):
+    """Classifica tipo de  em categorias padrão."""
     enc = normalize_text(enc)
 
     if "multi" in enc:
@@ -111,7 +111,7 @@ def build_result(ref: Optional[pd.Series], best: Optional[Dict[str, Any]]) -> Di
             "tensao": ref["tensao"],
             "fases": ref["fases"],
             "comunicacao": ref["comunicacao"],
-            "encoder": ref["encoder"],
+            "": ref[""],
             "eixo": ref["tipo_de_eixo"],
             "freio": ref["freio"],
             "altura_eixo_mm": ref["altura_eixo_mm"]
@@ -126,7 +126,7 @@ def build_result(ref: Optional[pd.Series], best: Optional[Dict[str, Any]]) -> Di
             "tensao": cand["tensao"],
             "fases": cand["fases"],
             "comunicacao": cand["comunicacao"],
-            "encoder": cand["encoder"],
+            "": cand[""],
             "eixo": cand["tipo_de_eixo"],
             "freio": cand["freio"],
             "altura_eixo_mm": cand["altura_eixo_mm"],
@@ -167,7 +167,7 @@ def load_database(db_path: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
             df["motor_mlfb"] = df["motor_mlfb"].apply(normalize_mlfb)
             df["drive_mlfb"] = df["drive_mlfb"].apply(normalize_mlfb)
 
-            df["encoder_class"] = df["encoder"].apply(classify_encoder)
+            df["_class"] = df[""].apply(classify_)
 
             df["comunicacao"] = df["comunicacao"].astype(str).str.strip()
 
@@ -338,12 +338,12 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
             score += 0
             warnings.append("Interface de comunicação diferente")
 
-        # ENCODER (REGRA CORRIGIDA)
-        ref_enc = ref["encoder_class"]
-        cand_enc = cand["encoder_class"]
+        #  (REGRA CORRIGIDA)
+        ref_enc = ref["_class"]
+        cand_enc = cand["_class"]
 
         if ref_enc == "MT" and cand_enc in ["ST", "ST17", "ST21"]:
-            logger.debug("Encoder multi-turn para single-turn não permitido")
+            logger.debug(" multi-turn para single-turn não permitido")
             return None
 
         if ref_enc == "ST21":
@@ -352,13 +352,13 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
             else:
                 score -= 5
                 warnings.append(
-                    f"Encoder ST 21-bit substituído por '{cand['encoder']}'"
+                    f" ST 21-bit substituído por '{cand['']}'"
                 )
 
         elif ref_enc == "INC":
             if cand_enc == "ST17":
                 warnings.append(
-                    f"O encoder incremental TTL 2500 PPR utilizado no sistema V90 foi substituído por encoder absoluto single-turn de 17 bits na solução S200, devido à não disponibilidade de suporte a encoders incrementais nesta geração. Pode ser necessária adequação de parametrização no drive e verificação de compatibilidade com o sistema de controle."
+                    f"Alteração do Encoder: O  incremental TTL 2500 PPR utilizado no conjunto 1FL6 + V90 foi substituído por encoder absoluto single-turn de 17 bits na solução S200, devido à não disponibilidade de suporte a encoders incrementais nesta geração. Pode ser necessária adequação de parametrização no drive e verificação de compatibilidade com o sistema de controle."
                 )
 
         elif ref_enc == cand_enc:
