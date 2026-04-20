@@ -382,7 +382,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
                 warnings.append("Diferença na configuração de freio")
 
         if ref["altura_eixo_mm"] != cand["altura_eixo_mm"]:
-            warnings.append("Altura de eixo diferente")
+            warnings.append("Altura de eixo diferente: O servomotor sucessor apresenta uma variação na altura de eixo em relação ao modelo legado. Essa diferença pode implicar pequenos ajustes mecânicos na interface de montagem, como adaptação de base, acoplamento ou alinhamento do conjunto.")
 
         return score, warnings
 
