@@ -358,7 +358,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
         elif ref_enc == "INC":
             if cand_enc == "ST17":
                 warnings.append(
-                    f"Alteração do Encoder: O  incremental TTL 2500 PPR utilizado no conjunto 1FL6 + V90 foi substituído por encoder absoluto single-turn de 17 bits na solução S200, devido à não disponibilidade de suporte a encoders incrementais nesta geração. Pode ser necessária adequação de parametrização no drive e verificação de compatibilidade com o sistema de controle."
+                    f" Alteração do Encoder: O  incremental TTL 2500 PPR utilizado no conjunto 1FL6 + V90 foi substituído por encoder absoluto single-turn de 17 bits na solução S200, devido à não disponibilidade de suporte a encoders incrementais nesta geração. Pode ser necessária adequação de parametrização no drive e verificação de compatibilidade com o sistema de controle."
                 )
 
         elif ref_enc == cand_enc:
