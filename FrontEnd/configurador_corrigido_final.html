@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurador de Migração SINAMICS V90 → S200 | Siemens</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-left">
+            <div class="header-logo"> <span>SIEMENS</span></div>
+            <div class="header-title">Configurador de Migração SINAMICS V90 → S200</div>
+        </div>
+        <div class="progress-section">
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="progress-steps">
+                <div class="progress-step active" id="step-1">Seleção</div>
+                <div class="progress-step" id="step-2">Entrada de Dados</div>
+                <div class="progress-step" id="step-3">Resultados</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELECTION PAGE -->
+    <div id="page-selection" class="page active">
+        <div class="container">
+            <div class="selection-wrapper">
+                <div class="selection-title">
+                    <h1>Ferramenta de Migração <span> SINAMICS V90</span></h1>
+                    <p>Sistema Inteligente para Análise de Compatibilidade e Recomendação de Conjunto Sucessor <span> SINAMICS S200 </span></p>
+                </div>
+
+                <div class="selection-grid">
+                    <div class="selection-card" onclick="selectMode('motor')">
+                        <div class="card-icon">
+                            <img src="img/motores.png" alt="Motor" />
+                        </div>
+                        <h2>Análise por código 1FL6 + Comunicação</h2>
+                        <ul>
+                            <li>Informar código MLFB da família 1FL6 - V90</li>
+                            <li>Selecionar protocolo de comunicação</li>
+                            <li>Sistema identifica conjunto atual equivalente</li>
+                        </ul>
+                        <button class="btn">Próximo <i class="fas fa-arrow-right"></i></button>
+                    </div>
+
+                    <div class="selection-card" onclick="selectMode('motor-drive')">
+                        <div class="card-icon">
+
+                        <img src="img/conjunto.png" alt="Servoacionamento" class="img-conjunto">    
+                        </div>
+                        <h2>Análise por Conjunto Drive + Motor</h2>
+                        <ul>
+                            <li>Informar código MLFB 1FL6</li>
+                            <li>Informar código MLFB V90</li>
+                            <li>Protocolo detectado automaticamente</li>
+                        </ul>
+                        <button class="btn">Próximo <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                    <!--Conheça a familia S200-->
+
+                <div class="s200-highlight">
+                <div class="s200-content">
+
+                    <!-- TEXTO -->
+                    <div class="s200-text">
+                        <h2>Conheça a nova geração <span>SINAMICS S200 + 1FL2</span></h2>
+                        <p class="s200-subtitle">
+                            Mais desempenho, integração e eficiência para aplicações modernas 
+                        </p>
+
+                        <div class="s200-features">
+                            <div class="feature-item"> 0,05 kW - 7 kW</div>
+                            <div class="feature-item"> 200-240V / 380-480V</div>
+                            <div class="feature-item"> PROFINET / PTI </div>
+                            <div class="feature-item"> Modelos IP55 e IP65</div>
+                            <div class="feature-item"> Motores de Alta, Média e Baixa inércia</div>
+                            <div class="feature-item"> Ideal para aplicações básicas</div>
+                            <div class="feature-item empty"></div>
+                            <div class="feature-button">
+                                <a href="https://sieportal.siemens.com/en-us/products-services/10535666?tree=CatalogTree#productInformation" 
+                                target="_blank" 
+                                rel="noopener noreferrer">
+                                    Conhecer solução completa <i class= "fas fa-arrow-right"></i>  
+                                </a>
+                            </div>
+                                
+                            </div>
+                        </div>
+                    
+                    <!-- IMAGEM -->
+                            <div class="s200-image">
+                                <a href="https://sieportal.siemens.com/en-us/products-services/10535666?tree=CatalogTree" target="_blank" title="Abrir página oficial do SINAMICS S200">
+                                    <img src="img/s200conjunto.png" alt="SINAMICS S200 + 1FL2">
+                                </a>
+                            </div>
+       </div>
+             </div>
+              <div class="migration-disclaimer">
+                            <div class="disclaimer-content">
+
+                                <h3>
+                                    <i class="fas fa-info-circle"></i>
+                                    Migração SINAMICS V90 → S200
+                                </h3>
+
+                                <p>
+                                    Esta ferramenta realiza a análise técnica de substituição de sistemas
+                                    <strong>SINAMICS V90</strong> (SIMOTICS 1FL6) pela nova família
+                                    <strong>SINAMICS S200</strong> (SIMOTICS 1FL2).
+                                    
+                                    A recomendação considera parâmetros como potência, torque, velocidade, tipo de encoder,
+                                    configuração mecânica e protocolo de comunicação, visando identificar o sucessor mais adequado para retrofit.
+                                </p>
+
+                                <t>
+                                    Esta ferramenta possui caráter orientativo e tem como objetivo apoiar a identificação de possíveis equivalências para migração entre equipamentos.
+                                    Os resultados não substituem a análise de engenharia da aplicação e devem ser validados por um profissional qualificado antes da tomada de decisão ou implementação.
+                                </t>
+
+                     </div>
+</div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- INPUT PAGE -->
+    <div id="page-input" class="page">
+        <div class="container">
+            <div class="input-wrapper">
+                <div class="input-form-section">
+                    <h1 id="input-title">Entrada de Dados</h1>
+                    <p class="input-form-subtitle">Informe os parâmetros por MLFB e protocolo de comunicação do conjunto atual</p>
+
+                    <div class="error-message" id="input-error"></div>
+
+                    <form id="input-form" onsubmit="handleSearch(event)">
+                        <div class="form-group">
+                            <label for="motor-mlfb">Código MLFB do Servomotor 1FL6 <span class="required">*</span></label>
+                            <input
+                                type="text"
+                                id="motor-mlfb"
+                                placeholder="Ex: 1FL6042-1AC61-2AA1"
+                                autocomplete="off"
+                                onblur="validateMotor()"
+                                required
+                            >
+                            <div class="form-feedback"></div>
+                            <small>Formato padrão: 1FL6XXX-XXXXX-XXXXX (SIMOTICS 1FL6)</small>
+                        </div>
+
+                        <div class="form-group" id="drive-group" style="display: none;">
+                            <label for="drive-mlfb">Código MLFB do Drive V90 <span class="required">*</span></label>
+                            <input
+                                type="text"
+                                id="drive-mlfb"
+                                placeholder="Ex: 6SL3210-1KE21-2UF1"
+                                autocomplete="off"
+                                onblur="validateDrive()"
+                            >
+                            <div class="form-feedback"></div>
+                            <small>Série SINAMICS V90 (formato: 6SL3210-XXXXX-XXXXX)</small>
+                        </div>
+
+                        <div class="form-group" id="communication-group" style="display: none;">
+                            <label>Protocolo de Comunicação <span class="required">*</span></label>
+                            <div class="radio-group">
+                                <label>
+                                    <input type="radio" name="communication" value="PTI" required>
+                                    PTI (Trem de Pulsos)
+                                </label>
+                                <label>
+                                    <input type="radio" name="communication" value="PROFINET" required>
+                                    PROFINET
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="goBack()">
+                                <i class="fas fa-arrow-left"></i> Voltar
+                            </button>
+                            <button type="submit" class="btn">
+                                Identificar Sucessor <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="motor-illustration">
+                    <div class="motor-visual" id="motor-visual1">
+                        <img src="img/conjunto.png" alt="Motor V90 1FL6">
+                    </div>
+                    <div class="motor-info">
+                        <h3>Série SIMOTICS S-1FL6</h3>
+                        <p>Motor Síncrono de Ímã Permanente com Comunicação Integrada e Encoder de Posição</p>
+                    </div>
+
+                   
+                </div>
+            </div>
+                
+            
+           
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+    <!-- RESULT PAGE -->
+    <div id="page-result" class="page">
+        <div class="container">
+            <div class="result-header">
+                <h1>Análise de <span>Compatibilidade</span></h1>
+                <p>Comparativo técnico entre configuração atual e sucessor recomendado</p>
+            </div>
+
+            <!-- COMPARISON -->
+            <div class="comparison-wrapper">
+                <div class="comparison-card v90">
+                    <div class="card-header">
+                        <div class="card-header-icon">🟡</div>
+                        <div>
+                            <h2>Configuração Atual Legada</h2>
+                            <span class="subtitle">SINAMICS V90 - SIMOTICS 1FL6</span>
+                        </div>
+                    </div>
+
+                    <div class="product-codes-section">
+                        <span class="product-codes-title">Códigos de Identificação</span>
+                        <div class="product-code-item">
+                            <span class="product-code-label">MLFB do Motor</span>
+                            <span class="product-code-value" id="result-motor-v90">-</span>
+                        </div>
+                        <div class="product-code-item" id="result-drive-v90-container" style="display: none;">
+                            <span class="product-code-label">MLFB do Drive</span>
+                            <span class="product-code-value" id="result-drive-v90">-</span>
+                        </div>
+                    </div>
+
+
+                    <table class="specs-table">
+
+                      
+                        <tr>
+                            <td>Potência Nominal (Motor)</td>
+                            <td id="spec-power-v90">-</td>
+                        </tr>
+                          <tr>
+                            <td>Potência do Drive</td>
+                            <td id="spec-drive-power-v90">-</td>
+                        </tr>
+                        <tr>
+                            <td>Torque Nominal</td>
+                            <td id="spec-torque-v90">-</td>
+                        </tr>
+                        <tr>
+                            <td>Velocidade Síncrona</td>
+                            <td id="spec-speed-v90">-</td>
+                        </tr>
+                        <tr>
+                            <td>Tensão de Alimentação</td>
+                            <td id="spec-voltage-v90">-</td>
+                        </tr>
+                        <tr>
+                            <td>Configuração de Fases</td>
+                            <td id="spec-phases-v90">-</td>
+                        </tr>
+                        <tr>
+                            <td>Protocolo de Comunicação</td>
+                            <td id="spec-comm-v90">-</td>
+                        </tr>
+                        <tr>
+                            <td>Tipo de Encoder</td>
+                            <td id="spec-encoder-v90">-</td>
+                        </tr>
+                        <tr>
+                            <td>Configuração de Eixo</td>
+                            <td id="spec-shaft-v90">-</td>
+                        </tr>
+                        <tr>
+                            <td>Sistema de Freio</td>
+                            <td id="spec-brake-v90">-</td>
+                        </tr>
+                        <tr>
+                            <td>Altura do Eixo</td>
+                            <td id="spec-height-v90">-</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="comparison-card s200">
+                    
+                    <div class="card-header">
+                       <div class="card-header custom-header">
+
+                            <!-- ÍCONE ESQUERDO -->
+                            <img src="img/new.png" class="header-icon-left" alt="Ícone S200">
+
+                            <!-- TEXTO CENTRAL -->
+                            <div class="header-text">
+                                <h2>Sucessor Recomendado</h2>
+                                <span class="subtitle">SINAMICS S200 - SIMOTICS 1FL2</span>
+                            </div>
+
+                            <!-- BADGE NEW (DIREITA) -->
+                            <img src="img/eco.png" class="header-icon-right" alt="New">
+
+                        </div>
+                    </div>
+
+                    <div class="product-codes-section">
+                        <span class="product-codes-title">Códigos de Identificação</span>
+                        <div class="product-code-item">
+                            <span class="product-code-label">MLFB do Motor</span>
+                            <span class="product-code-value" id="result-motor-s200">-</span>
+                        </div>
+                        <div class="product-code-item" id="result-drive-s200-container" style="display: none;">
+                            <span class="product-code-label">MLFB do Drive</span>
+                            <span class="product-code-value" id="result-drive-s200">-</span>
+                        </div>
+                    </div>
+
+                    <table class="specs-table">
+                        <tr>
+                            <td>Potência Nominal (Motor)</td>
+                            <td id="spec-power-s200">-</td>
+                        </tr>
+                        <tr>
+                            <td>Potência do Drive</td>
+                            <td id="spec-drive-power-s200">-</td>
+                        </tr>
+                        <tr>
+                            <td>Torque Nominal</td>
+                            <td id="spec-torque-s200">-</td>
+                        </tr>
+                        <tr>
+                            <td>Velocidade Síncrona</td>
+                            <td id="spec-speed-s200">-</td>
+                        </tr>
+                        <tr>
+                            <td>Tensão de Alimentação</td>
+                            <td id="spec-voltage-s200">-</td>
+                        </tr>
+                        <tr>
+                            <td>Configuração de Fases</td>
+                            <td id="spec-phases-s200">-</td>
+                        </tr>
+                        <tr>
+                            <td>Protocolo de Comunicação</td>
+                            <td id="spec-comm-s200">-</td>
+                        </tr>
+                        <tr>
+                            <td>Tipo de Encoder</td>
+                            <td id="spec-encoder-s200">-</td>
+                        </tr>
+                        <tr>
+                            <td>Configuração de Eixo</td>
+                            <td id="spec-shaft-s200">-</td>
+                        </tr>
+                        <tr>
+                            <td>Sistema de Freio</td>
+                            <td id="spec-brake-s200">-</td>
+                        </tr>
+                        <tr>
+                            <td>Altura do Eixo</td>
+                            <td id="spec-height-s200">-</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CHARTS -->
+           <div class="charts-section">
+
+    <div class="charts-title">
+        <i class="fas fa-cube"></i>
+        Conjunto Sucessor <span>SINAMICS S200 + SIMOTICS 1FL2</span> (Ver no SiePortal)
+    </div>
+<div class="product-grid">
+
+    <!-- DRIVE S200 -->
+    <a id="s200-drive-link"
+       class="product-card"
+       target="_blank"
+       rel="noopener noreferrer"
+       data-power-field="drive_potencia_kw"
+       data-suffix="kW">
+
+        <img src="img/s200_individual.png" alt="Drive S200" title="Abrir no SiePortal">
+
+        <div class="product-label">
+            ServoDrive SINAMICS S200  <span class="auto-power"></span>
+        </div>
+    </a>
+
+    <!-- MOTOR S200 -->
+    <a id="s200-motor-link"
+       class="product-card"
+       target="_blank"
+       rel="noopener noreferrer"
+       data-power-field="potencia_kw"
+       data-suffix="kW">
+
+        <img src="img/1fl2_individual.png" alt="Motor S200" title="Abrir no SiePortal">
+
+        <div class="product-label">
+            Servomotor SIMOTICS 1FL2 - <span class="auto-power"></span> 
+        </div>
+    </a>
+
+</div>
+</div>
+
+            <!-- WARNINGS -->
+            <div class="warnings-section" id="warnings-section">
+                <h3> Observações Técnicas Relevantes</h3>
+                <div id="warnings-list"></div>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="result-actions">
+                <button class="btn btn-secondary" onclick="copyToClipboard()">
+                    <i class="fas fa-copy"></i> Copiar Códigos
+                </button>
+                <button class="btn" onclick="newSearch()">
+                    <i class="fas fa-search"></i> Nova Análise
+                </button>
+                <button class="btn btn-secondary" onclick="exportToExcel()">
+                    <i class="fas fa-file-excel"></i> Exportar .XLSX
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ERROR PAGE -->
+    <div id="page-error" class="page">
+        <div class="error-container">
+            <div class="error-icon">❌</div>
+            <h1>Análise Inconclusiva</h1>
+            <p>Não foi possível identificar um sucessor compatível para a configuração técnica informada. Verifique os códigos MLFB e tente novamente.</p>
+
+            <div style="margin-top: 40px;">
+                <button class="btn btn-secondary" onclick="goBack()" style="margin-bottom: 15px;">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+                <button class="btn" onclick="newSearch()">
+                    <i class="fas fa-search"></i> Nova Análise
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="copy-feedback" id="copy-feedback">
+        <i class="fas fa-check-circle"></i> Códigos copiados com sucesso!
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
