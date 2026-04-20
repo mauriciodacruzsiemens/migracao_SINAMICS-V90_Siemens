@@ -73,7 +73,7 @@
             span.textContent = value ? ` ${value} ${suffix}` : "";
         }
     });
-}
+    }
 
 
     function selectMode(mode) {
