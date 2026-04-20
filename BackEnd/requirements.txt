@@ -1,5 +1,4 @@
 fastapi
 uvicorn
 pandas
-sqlite3
 openpyxl
