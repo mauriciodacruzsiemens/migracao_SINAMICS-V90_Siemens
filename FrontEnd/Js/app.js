@@ -189,6 +189,8 @@
             if (!data || !data.atual || !data.sucessor) {
             showPage('page-error', 3);
             return;
+
+            
 }
 
             // CORREÇÃO: Usar data.data.melhor_opcao em vez de data.sucessor
@@ -203,6 +205,9 @@
         } catch (error) {
             errorDiv.textContent = '❌ ' + error.message;
             errorDiv.classList.add('show');
+        }
+        finally {
+        btn.classList.remove("loading");
         }
     }
 
