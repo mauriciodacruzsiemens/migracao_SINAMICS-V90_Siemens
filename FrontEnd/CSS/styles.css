@@ -4,7 +4,9 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        * {
+            box-sizing: border-box;
+        }
         :root {
             --bold-green: #00FFB9;
             --dark-blue: #000028;
@@ -1420,6 +1422,88 @@
 
             .progress-section {
                 width: 100%;
+        
             }
+
+            /* ===== FIX MOBILE INPUT PAGE ===== */
+            @media (max-width: 768px) {
+
+                /* Container mais compacto */
+                .container {
+                    padding: 15px;
+                }
+
+                /* Stack vertical */
+                .input-wrapper {
+                    grid-template-columns: 1fr;
+                    gap: 25px;
+                    width: 100%;
+                }
+
+                /* Corrige overflow lateral */
+                .input-form-section {
+                    padding: 25px 15px;
+                    width: 100%;
+                    max-width: 100%;
+                    overflow: hidden;
+                }
+
+                /* Inputs não estourarem */
+                .form-group input,
+                .form-group select {
+                    width: 100%;
+                    max-width: 100%;
+                }
+
+                /* Radio group quebra linha */
+                .radio-group {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                /* Botões empilhados */
+                .form-actions {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                /* IMAGEM ↓↓↓ (principal causa do overflow) */
+                .motor-visual {
+                    width: 100%;
+                    max-width: 280px;
+                    height: auto;
+                }
+
+                .motor-visual img {
+                    width: 100%;
+                    height: auto;
+                }
+
+                /* Texto abaixo da imagem */
+                .motor-info {
+                    padding: 15px;
+                }
+
+                /* Evita qualquer scroll lateral global */
+                body {
+                    overflow-x: hidden;
+                }
+            }
+            @media (max-width: 768px) {
+
+                .product-grid {
+                    grid-template-columns: 1fr; /* empilha */
+                }
+
+                .product-card {
+                    min-height: 220px; /* força alinhamento visual */
+                }
+
+                .product-card img {
+                    max-height: 140px;
+                }
+            }
+
         }
+
     
