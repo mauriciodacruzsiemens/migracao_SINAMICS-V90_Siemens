@@ -53,8 +53,8 @@ def normalize_phases(p):
     return phases
 
 
-def classify_(enc):
-    """Classifica tipo de  em categorias padrão."""
+def classify_encoder(enc):
+    """Classifica tipo de encoder em categorias padrão."""
     enc = normalize_text(enc)
 
     if "multi" in enc:
@@ -114,8 +114,7 @@ def build_result(ref: Optional[pd.Series], best: Optional[Dict[str, Any]]) -> Di
             "encoder": ref["encoder"],
             "eixo": ref["tipo_de_eixo"],
             "freio": ref["freio"],
-            "altura_eixo_mm": ref["altura_eixo_mm"],
-            
+            "altura_eixo_mm": ref["altura_eixo_mm"]
         },
         "sucessor": {
             "motor": cand["motor_mlfb"],
@@ -131,7 +130,6 @@ def build_result(ref: Optional[pd.Series], best: Optional[Dict[str, Any]]) -> Di
             "eixo": cand["tipo_de_eixo"],
             "freio": cand["freio"],
             "altura_eixo_mm": cand["altura_eixo_mm"],
-            
         },
         "desvios": best["warnings"]
     })
@@ -169,13 +167,13 @@ def load_database(db_path: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
             df["motor_mlfb"] = df["motor_mlfb"].apply(normalize_mlfb)
             df["drive_mlfb"] = df["drive_mlfb"].apply(normalize_mlfb)
 
-            df["_class"] = df["encoder"].apply(classify_)
+            df["encoder_class"] = df["encoder"].apply(classify_encoder)
 
             df["comunicacao"] = df["comunicacao"].astype(str).str.strip()
 
             df["voltage_class"] = df["tensao"]
 
-             df["inertia_class"] = df["inertia"]
+            df["inertia_class"] = df["inertia"]
 
             df["phases_list"] = df["fases"].apply(normalize_phases)
 
@@ -307,17 +305,16 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
             return None
         score += 30
 
-            if cand["inertia"] == ref["inertia"]:
-            score += 50
-        else:
-            score -= 100
-            warnings.append("Inercia diferente.")
-
-        
         if cand["motor_power_kw"] >= ref["motor_power_kw"]:
             score += 15
         else:
             warnings.append("Potência do motor inferior ao requerido")
+
+        if cand["inertia"] == ref["inertia"]:
+            score += 50
+        else:
+            score -= 100
+            warnings.append("Inercia diferente.")
 
         if cand["drive_power_kw"] >= ref["drive_power_kw"]:
             score += 10
@@ -349,12 +346,12 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
             score += 0
             warnings.append("Interface de comunicação diferente")
 
-        #  (REGRA CORRIGIDA)
-        ref_enc = ref["_class"]
-        cand_enc = cand["_class"]
+        # ENCODER (REGRA CORRIGIDA)
+        ref_enc = ref["encoder_class"]
+        cand_enc = cand["encoder_class"]
 
         if ref_enc == "MT" and cand_enc in ["ST", "ST17", "ST21"]:
-            logger.debug(" multi-turn para single-turn não permitido")
+            logger.debug("Encoder multi-turn para single-turn não permitido")
             return None
 
         if ref_enc == "ST21":
@@ -362,13 +359,14 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
                 score += 5
             else:
                 score -= 5
-                
+                warnings.append(
+                    f"Encoder ST 21-bit substituído por '{cand['encoder']}'"
                 )
 
         elif ref_enc == "INC":
             if cand_enc == "ST17":
                 warnings.append(
-                    f" Alteração do Encoder: O  incremental TTL 2500 PPR utilizado no conjunto 1FL6 + V90 foi substituído por encoder absoluto single-turn de 17 bits na solução S200, devido à não disponibilidade de suporte a encoders incrementais nesta geração. Pode ser necessária adequação de parametrização no drive e verificação de compatibilidade com o sistema de controle."
+                    f"O encoder incremental TTL 2500 PPR utilizado no sistema V90 foi substituído por encoder absoluto single-turn de 17 bits na solução S200, devido à não disponibilidade de suporte a encoders incrementais nesta geração. Pode ser necessária adequação de parametrização no drive e verificação de compatibilidade com o sistema de controle."
                 )
 
         elif ref_enc == cand_enc:
@@ -392,7 +390,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
                 warnings.append("Diferença na configuração de freio")
 
         if ref["altura_eixo_mm"] != cand["altura_eixo_mm"]:
-            warnings.append("Altura de eixo diferente: O servomotor sucessor apresenta uma variação na altura de eixo em relação ao modelo legado. Essa diferença pode implicar pequenos ajustes mecânicos na interface de montagem, como adaptação de base, acoplamento ou alinhamento do conjunto.")
+            warnings.append("Altura de eixo diferente")
 
         return score, warnings
 
