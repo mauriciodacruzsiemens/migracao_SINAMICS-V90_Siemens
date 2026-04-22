@@ -173,6 +173,8 @@ def load_database(db_path: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
 
             df["voltage_class"] = df["tensao"]
 
+             df["inertia_class"] = df["inertia"]
+
             df["phases_list"] = df["fases"].apply(normalize_phases)
 
             df["tipo_de_eixo"] = df["tipo_de_eixo"].apply(normalize_text)
