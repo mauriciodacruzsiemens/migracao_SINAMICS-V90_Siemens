@@ -111,7 +111,7 @@ def build_result(ref: Optional[pd.Series], best: Optional[Dict[str, Any]]) -> Di
             "tensao": ref["tensao"],
             "fases": ref["fases"],
             "comunicacao": ref["comunicacao"],
-            "": ref[""],
+            "encoder": ref["encoder"],
             "eixo": ref["tipo_de_eixo"],
             "freio": ref["freio"],
             "altura_eixo_mm": ref["altura_eixo_mm"]
@@ -126,7 +126,7 @@ def build_result(ref: Optional[pd.Series], best: Optional[Dict[str, Any]]) -> Di
             "tensao": cand["tensao"],
             "fases": cand["fases"],
             "comunicacao": cand["comunicacao"],
-            "": cand[""],
+            "encoder": cand["encoder"],
             "eixo": cand["tipo_de_eixo"],
             "freio": cand["freio"],
             "altura_eixo_mm": cand["altura_eixo_mm"],
@@ -167,7 +167,7 @@ def load_database(db_path: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
             df["motor_mlfb"] = df["motor_mlfb"].apply(normalize_mlfb)
             df["drive_mlfb"] = df["drive_mlfb"].apply(normalize_mlfb)
 
-            df["_class"] = df[""].apply(classify_)
+            df["_class"] = df["encoder"].apply(classify_)
 
             df["comunicacao"] = df["comunicacao"].astype(str).str.strip()
 
