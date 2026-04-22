@@ -23,7 +23,12 @@ app.add_middleware(
 )
 
 # carrega banco
-df_v90, df_s200 = load_database("banco.db")
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "banco.db")
+
+df_v90, df_s200 = load_database(DB_PATH)
 
 
 class InputData(BaseModel):
