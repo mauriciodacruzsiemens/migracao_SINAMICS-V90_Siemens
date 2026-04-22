@@ -114,7 +114,8 @@ def build_result(ref: Optional[pd.Series], best: Optional[Dict[str, Any]]) -> Di
             "encoder": ref["encoder"],
             "eixo": ref["tipo_de_eixo"],
             "freio": ref["freio"],
-            "altura_eixo_mm": ref["altura_eixo_mm"]
+            "altura_eixo_mm": ref["altura_eixo_mm"],
+            "inertia": ref["inertia"],
         },
         "sucessor": {
             "motor": cand["motor_mlfb"],
@@ -130,6 +131,7 @@ def build_result(ref: Optional[pd.Series], best: Optional[Dict[str, Any]]) -> Di
             "eixo": cand["tipo_de_eixo"],
             "freio": cand["freio"],
             "altura_eixo_mm": cand["altura_eixo_mm"],
+            "inertia": ref["inertia"],
         },
         "desvios": best["warnings"]
     })
