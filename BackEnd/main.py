@@ -303,6 +303,13 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
             return None
         score += 30
 
+            if cand["inertia"] == ref["inertia"]:
+            score += 20
+        else:
+            score -= 30
+            warnings.append("Inercia diferente.")
+
+        
         if cand["motor_power_kw"] >= ref["motor_power_kw"]:
             score += 15
         else:
