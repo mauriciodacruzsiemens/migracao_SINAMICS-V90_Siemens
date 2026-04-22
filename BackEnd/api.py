@@ -2,6 +2,14 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from pydantic import BaseModel
+import sqlite3
+
+conn = sqlite3.connect("banco.db")
+cursor = conn.cursor()
+
+print("Tabelas no banco:")
+print(cursor.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall())
+
 
 from main import (
     load_database,
