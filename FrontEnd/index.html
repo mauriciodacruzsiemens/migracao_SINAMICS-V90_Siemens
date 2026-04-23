@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configurador de Migração SINAMICS V90 → S200 | Siemens</title>
-    <link rel="stylesheet" href="/CSS/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
@@ -80,12 +80,11 @@
                         <p class="s200-subtitle">
                             Mais desempenho, integração e eficiência para aplicações modernas 
                         </p>
-
                         <div class="s200-features">
                             <div class="feature-item"> 0,05 kW - 7 kW</div>
                             <div class="feature-item"> 200-240V / 380-480V</div>
                             <div class="feature-item"> PROFINET / PTI </div>
-                            <div class="feature-item"> Modelos IP55 e IP65</div>
+                            <div class="feature-item"> Modelos IP54 e IP65</div>
                             <div class="feature-item"> Motores de Alta, Média e Baixa inércia</div>
                             <div class="feature-item"> Ideal para aplicações básicas</div>
                             <div class="feature-item empty"></div>
@@ -190,6 +189,7 @@
                             </div>
                         </div>
 
+                        
                         <div class="form-actions">
                             <button type="button" class="btn btn-secondary" onclick="goBack()">
                                 <i class="fas fa-arrow-left"></i> Voltar
@@ -217,13 +217,9 @@
                         <h3>Série SIMOTICS S-1FL6</h3>
                         <p>Motor Síncrono de Ímã Permanente com Comunicação Integrada e Encoder de Posição</p>
                     </div>
-
-                   
                 </div>
             </div>
-                
-            
-           
+
             </div>
 
 
@@ -314,6 +310,8 @@
                     </table>
                 </div>
 
+               
+
                 <div class="comparison-card s200">
                     
                     <div class="card-header">
@@ -340,6 +338,10 @@
                             <span class="product-code-label">MLFB do Motor</span>
                             <span class="product-code-value" id="result-motor-s200">-</span>
                         </div>
+
+                        <div id="ip-toggle-container" style="display:none;"></div>
+
+                        
                         <div class="product-code-item" id="result-drive-s200-container" style="display: none;">
                             <span class="product-code-label">MLFB do Drive</span>
                             <span class="product-code-value" id="result-drive-s200">-</span>
@@ -487,6 +489,9 @@
         }
     }
     </script>
-    <script src="/Js/app.v2.js"></script>
+    <script src="Js/app.v2.js"></script>
+    <footer class="footer">
+    <span>© 2026 • Desenvolvido por Mauricio da Cruz </span>
+    </footer>
 </body>
 </html>
