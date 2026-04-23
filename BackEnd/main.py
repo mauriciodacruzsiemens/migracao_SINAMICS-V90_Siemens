@@ -381,7 +381,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
         elif ref_enc == "INC":
             if cand_enc == "ST17":
                 warnings.append(
-                    f"O encoder incremental TTL 2500 PPR utilizado no sistema V90 foi substituído por encoder absoluto single-turn de 17 bits na solução S200, devido à não disponibilidade de suporte a encoders incrementais nesta geração. Pode ser necessária adequação de parametrização no drive e verificação de compatibilidade com o sistema de controle."
+                    f"O encoder incremental TTL 2500 PPR utilizado no sistema V90+1FL6 foi substituído por encoder absoluto single-turn de 17 bits na solução S200+1FL2, devido à não disponibilidade de suporte a encoders incrementais nesta geração. Pode ser necessária adequação de parametrização no drive e verificação de compatibilidade com o sistema de controle."
                 )
 
         elif ref_enc == cand_enc:
@@ -405,7 +405,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
                 warnings.append("Diferença na configuração de freio")
 
         if ref["altura_eixo_mm"] != cand["altura_eixo_mm"]:
-            warnings.append("Altura de eixo diferente")
+            warnings.append("A altura de eixo do motor sucessor é diferente da configuração original, o que pode afetar alinhamento mecânico, interface com redutores/acoplamentos e pontos de fixação. É necessária validação dimensional da aplicação para garantir a correta instalação.")
 
         return score, warnings
 
