@@ -246,40 +246,46 @@ function displayResult() {
 `))
         : (n.style.display = "none");
 
-            let toggleContainer = document.getElementById("ip-toggle-container");
+                       let toggleContainer = document.getElementById("ip-toggle-container");
 
             if (t.permite_ip54) {
                 toggleContainer.style.display = "block";
 
-                toggleContainer.innerHTML = `
-    <div>
-        <div class="ip-label">
-    Grau de proteção
+               toggleContainer.innerHTML = `
+                    <div class="ip-wrapper">
 
-    ${
-        t.permite_ip54
-            ? `
-        <div class="info-icon">
-            ⓘ
-            <div class="info-tooltip">
-                Motores com altura de eixo SH20 e SH30 permitem configuração em IP54 e IP65, conforme necessidade de aplicação.
-            </div>
-        </div>
-    `
-            : ""
-    }
-</div>
+                        <!-- LINHA 1 -->
+                        <div class="ip-label">
+                            Grau de proteção
 
-        <div class="ip-segmented">
-            <div id="ip-slider" class="ip-slider"></div>
+                            ${
+                                t.permite_ip54
+                                    ? `
+                                <div class="info-icon">
+                                   🛈
+                                    <div class="info-tooltip">
+                                        Para motores com altura de eixo SH20 (20mm) e SH30 (30mm), 
+                                        é possível selecionar grau de proteção IP54 ou IP65, conforme necessidade da aplicação.
+                                    </div>
+                                </div>
+                            `
+                                    : ""
+                            }
+                        </div>
 
-            <button id="seg-ip65" class="ip-segment active">IP65</button>
-            <button id="seg-ip54" class="ip-segment">IP54</button>
-        </div>
+                        <!-- LINHA 2 -->
+                        <div class="ip-row">
+                            <div class="ip-segmented">
+                                <div class="ip-slider" id="ip-slider"></div>
+                                <button id="seg-ip65" class="ip-segment active">IP65</button>
+                                <button id="seg-ip54" class="ip-segment">IP54</button>
+                            </div>
 
-        <div id="ip-feedback" class="ip-feedback"></div>
-    </div>
-`;
+                            <div id="ip-feedback" class="ip-feedback"></div>
+                        </div>
+
+                    </div>
+                `;
 
                 document.getElementById("seg-ip65").onclick = () => updateIP("IP65", motorBase);
                 document.getElementById("seg-ip54").onclick = () => updateIP("IP54", motorBase);
@@ -353,27 +359,19 @@ function updateIP(ip, motorBase) {
 
     let motorAtual = applyProtectionToMLFB(motorBase, ip);
 
-    // 🔥 ATUALIZA O ESTADO GLOBAL
-    appState.motorS200.motor = motorAtual;
-
-    // 🔄 ATUALIZA UI
     document.getElementById("result-motor-s200").textContent =
         formatMLFB(motorAtual);
 
-    // 🔗 ATUALIZA LINK DINÂMICO
-    updateS200Products(
-        appState.motorS200.drive,
-        motorAtual
-    );
-
-    // 🎛️ CONTROLE VISUAL
+    // ELEMENTOS
     const btn65 = document.getElementById("seg-ip65");
     const btn54 = document.getElementById("seg-ip54");
     const slider = document.getElementById("ip-slider");
 
+    // RESET
     btn65.classList.remove("active");
     btn54.classList.remove("active");
 
+    // MOVE SLIDER
     if (ip === "IP65") {
         btn65.classList.add("active");
         slider.style.transform = "translateX(0%)";
@@ -382,7 +380,14 @@ function updateIP(ip, motorBase) {
         slider.style.transform = "translateX(100%)";
     }
 
-    // 💬 FEEDBACK
-    document.getElementById("ip-feedback").textContent =
-        `Código ajustado para ${ip}`;
-}
+    // FEEDBACK
+    const feedback = document.getElementById("ip-feedback");
+
+        feedback.textContent = `🛈 Código ajustado para ${ip}`;
+        feedback.classList.add("show");
+
+        // opcional: sumir depois de 2s
+        setTimeout(() => {
+            feedback.classList.remove("show");
+        }, 4000);
+        }
