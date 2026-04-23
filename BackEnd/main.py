@@ -53,6 +53,11 @@ def normalize_phases(p):
     return phases
 
 
+def supports_ip54_switch(altura: int) -> bool:
+    """Verifica se o motor permite alternância IP54/IP65."""
+    return altura in [20, 30]
+
+
 def classify_encoder(enc):
     """Classifica tipo de encoder em categorias padrão."""
     enc = normalize_text(enc)
@@ -82,7 +87,7 @@ def to_python(val):
 
 def build_result(ref: Optional[pd.Series], best: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     import numpy as np
-
+    print("🔥 BUILD_RESULT NOVO EXECUTANDO")
     def convert(obj):
         if isinstance(obj, np.integer):
             return int(obj)
@@ -99,6 +104,15 @@ def build_result(ref: Optional[pd.Series], best: Optional[Dict[str, Any]]) -> Di
 
     ref = ref.to_dict()
     cand = best["data"]
+    cand = cand.to_dict()
+
+    altura = cand["altura_eixo_mm"]
+    ip_switch = supports_ip54_switch(altura)
+
+    if ip_switch:
+        best["warnings"].append(
+            "Este motor permite seleção de grau de proteção (IP54/IP65). Utilize o seletor para ajustar o código."
+        )
 
     return convert({
         "atual": {
@@ -118,6 +132,7 @@ def build_result(ref: Optional[pd.Series], best: Optional[Dict[str, Any]]) -> Di
         },
         "sucessor": {
             "motor": cand["motor_mlfb"],
+            "permite_ip54": ip_switch,
             "drive": cand.get("drive_mlfb"),
             "potencia_kw": cand["motor_power_kw"],
             "potencia_kw_drive": cand["drive_power_kw"],
@@ -445,8 +460,10 @@ def find_best_match(ref: pd.Series, df_s200: pd.DataFrame) -> Optional[Dict[str,
             return None
 
         candidates.sort(key=lambda x: x["score"], reverse=True)
+
         logger.info(
             f"Melhor correspondência encontrada com score: {candidates[0]['score']}")
+
         return candidates[0]
 
     except Exception as e:
