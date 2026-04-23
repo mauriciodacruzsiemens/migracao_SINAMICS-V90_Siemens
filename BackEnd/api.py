@@ -1,4 +1,3 @@
-
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -13,13 +12,12 @@ from main import (
 
 app = FastAPI()
 
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # libera qualquer origem (teste)
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # ESSENCIAL
-    allow_headers=["*"],  # ESSENCIAL
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # carrega banco
@@ -29,7 +27,7 @@ df_v90, df_s200 = load_database("banco.db")
 class InputData(BaseModel):
     motor: str
     drive: str | None = None
-    comunicacao: str | None = None  # ← alinhado com o front
+    comunicacao: str | None = None
 
 
 @app.post("/migrar")
@@ -53,12 +51,30 @@ def migrar(data: InputData):
     if ref is None:
         return {"erro": "Conjunto não encontrado"}
 
+    # 🔥 AGORA SEM QUALQUER LÓGICA DE IP
     best = find_best_match(ref, df_s200)
 
     if best is None:
         return {"erro": "Nenhum sucessor encontrado"}
 
-    return build_result(ref, best)
+    result = build_result(ref, best)
+
+    # 🔍 DEBUG (OBRIGATÓRIO AGORA)
+    print("\n🚀 RESULTADO GERADO PELO BACKEND:")
+    print(result)
+
+    # 🔥 GARANTIA DO CAMPO (TESTE CONTROLADO)
+    altura = result["sucessor"]["altura_eixo_mm"]
+
+    if altura in [20, 30]:
+        result["sucessor"]["permite_ip54"] = True
+    else:
+        result["sucessor"]["permite_ip54"] = False
+
+    print("\n✅ RESULTADO FINAL ENVIADO:")
+    print(result)
+
+    return result
 
 
 @app.options("/migrar")
