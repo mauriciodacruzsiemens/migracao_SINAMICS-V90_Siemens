@@ -164,7 +164,7 @@ async function exportToExcel() {
             },
             {
                 Descrição: "Conjunto SINAMICS S200 + SIMOTICS 1FL2 (Sucessor)",
-                "Article Number Servomotor": formatMLFB(t.motor) || formatMLFB(t.mlfb) || "-",
+                "Article Number Servomotor": formatMLFB(appState.motorS200.motor) || formatMLFB(t.mlfb) || "-",
                 "Article Number Servodrive": formatMLFB(t.drive) || "-",
                 "Pot\xeancia (kW)": t.potencia_kw || t.potencia || "-",
                 "Torque (Nm)": t.torque_nm || t.torque || "-",
@@ -231,7 +231,10 @@ function displayResult() {
         (document.getElementById("spec-drive-power-s200").innerHTML =
             ` <span class="highlight"> ${t.potencia_kw_drive || "-"} </span> kW`),
         fillProductPowers(t),
-        updateS200Products(t.drive_code || t.drive, t.motor_code || t.motor);
+       updateS200Products(
+            t.drive,
+            appState.motorS200.motor || t.motor
+        );
     let n = document.getElementById("warnings-section"),
         r = document.getElementById("warnings-list");
     o && o.length > 0
@@ -350,19 +353,27 @@ function updateIP(ip, motorBase) {
 
     let motorAtual = applyProtectionToMLFB(motorBase, ip);
 
+    // 🔥 ATUALIZA O ESTADO GLOBAL
+    appState.motorS200.motor = motorAtual;
+
+    // 🔄 ATUALIZA UI
     document.getElementById("result-motor-s200").textContent =
         formatMLFB(motorAtual);
 
-    // ELEMENTOS
+    // 🔗 ATUALIZA LINK DINÂMICO
+    updateS200Products(
+        appState.motorS200.drive,
+        motorAtual
+    );
+
+    // 🎛️ CONTROLE VISUAL
     const btn65 = document.getElementById("seg-ip65");
     const btn54 = document.getElementById("seg-ip54");
     const slider = document.getElementById("ip-slider");
 
-    // RESET
     btn65.classList.remove("active");
     btn54.classList.remove("active");
 
-    // MOVE SLIDER
     if (ip === "IP65") {
         btn65.classList.add("active");
         slider.style.transform = "translateX(0%)";
@@ -371,7 +382,7 @@ function updateIP(ip, motorBase) {
         slider.style.transform = "translateX(100%)";
     }
 
-    // FEEDBACK
+    // 💬 FEEDBACK
     document.getElementById("ip-feedback").textContent =
         `Código ajustado para ${ip}`;
 }
