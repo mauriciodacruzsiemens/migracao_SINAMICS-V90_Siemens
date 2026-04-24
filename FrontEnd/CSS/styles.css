@@ -171,6 +171,17 @@
     border-color: #2b2b2b transparent transparent transparent;
 }
 
+@media (max-width: 600px) {
+    .ip-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .ip-feedback {
+        margin-top: 2px;
+    }
+}
 .info-icon:hover .info-tooltip {
     opacity: 1;
     transform: translateX(-50%) scale(1);
