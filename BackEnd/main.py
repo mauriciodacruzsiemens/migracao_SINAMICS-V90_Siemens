@@ -314,23 +314,75 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
         score = 0
         warnings = []
 
-        if cand["motor_torque_nm"] < ref["motor_torque_nm"]:
-            logger.debug(
-                f"Torque insuficiente: {cand['motor_torque_nm']} < {ref['motor_torque_nm']}")
-            return None
-        score += 30
+        torque_ref = ref["motor_torque_nm"]
+        torque_cand = cand["motor_torque_nm"]
 
-        if cand["motor_power_kw"] >= ref["motor_power_kw"]:
+        power_ref = ref["motor_power_kw"]
+        power_cand = cand["motor_power_kw"]
+
+        ref_inertia = ref["inertia"].strip().lower()
+        cand_inertia = cand["inertia"].strip().lower()
+
+        percent_torque = (torque_cand - torque_ref) / torque_ref
+        percent_power = (power_cand - power_ref) / power_ref
+
+        # 🎯 EXCEÇÃO CONTROLADA (SEU CASO)
+        is_exception_case = (
+            ref_inertia == "baixa" and
+            cand_inertia == "media" and
+            percent_torque >= -0.05 and
+            percent_power >= -0.05
+        )
+
+        # =========================
+        # 🔧 POTÊNCIA
+        # =========================
+        if power_cand >= power_ref:
             score += 15
         else:
-            warnings.append("Potência do motor inferior ao requerido")
+            if is_exception_case:
+                score += 15
+            else:
+                warnings.append(
+                    "Potência do motor reduzida de 1,5 kW para 1,45 kW.")
 
-        if cand["inertia"] == ref["inertia"]:
+        # =========================
+        # 🔧 TORQUE
+        # =========================
+        if percent_torque < -0.10:
+            logger.debug(f"Torque muito inferior: {torque_cand} < {torque_ref}")
+            return None
+
+        elif percent_torque < 0:
+            if is_exception_case:
+                score += 30
+            else:
+                penalty = abs(percent_torque) * 100
+                score += 30 - penalty
+                warnings.append(
+                    f"Torque nominal reduzido ({torque_cand:.2f} Nm vs {torque_ref:.2f} Nm)."
+                )
+        else:
+            score += 30
+
+        # =========================
+        # 🔧 INÉRCIA
+        # =========================
+        if cand_inertia == ref_inertia:
             score += 50
+
+        elif is_exception_case:
+            score += 50  
+
+            warnings.append(
+                "Inércia alterada de baixa para média (característica construtiva da família 1FL2). "
+                "Pequena redução de torque nominal (4,78Nm para 4,6Nm) e potência nominal (1,5kW para 1,45kW) observada. Validar aplicação."
+            )
+
         else:
             score -= 100
-            warnings.append("Inercia diferente.")
-
+            warnings.append("Inércia diferente da especificação original.")
+            
         if cand["drive_power_kw"] >= ref["drive_power_kw"]:
             score += 10
         else:
