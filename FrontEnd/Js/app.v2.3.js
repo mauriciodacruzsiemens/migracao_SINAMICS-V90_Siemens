@@ -262,7 +262,10 @@ function displayResult() {
                                 t.permite_ip54
                                     ? `
                                 <div class="info-icon">
-                                   🛈
+                                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M11 10h2v7h-2zm0-4h2v2h-2zm1-4C6.48 2 2 6.48 2 12s4.48 10 
+                                        10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                                    </svg>
                                     <div class="info-tooltip">
                                         Para motores com altura de eixo SH20 (20mm) e SH30 (30mm), 
                                         é possível selecionar grau de proteção IP54 ou IP65, conforme necessidade da aplicação.
