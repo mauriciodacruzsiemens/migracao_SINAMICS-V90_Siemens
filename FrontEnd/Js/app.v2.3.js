@@ -256,7 +256,7 @@ function displayResult() {
 
                         <!-- LINHA 1 -->
                         <div class="ip-label">
-                            Grau de proteção
+                            Grau de proteção do motor
 
                             ${
                                 t.permite_ip54
