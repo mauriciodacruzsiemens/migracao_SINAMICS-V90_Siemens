@@ -11,6 +11,12 @@
     transition: all 0.3s ease;
 }
 
+.ip-feedback {
+    display: inline-flex;
+    align-items:stretch;
+    gap: 4px;
+}
+
 .footer span:hover {
     color: var(--bold-green);
 }
