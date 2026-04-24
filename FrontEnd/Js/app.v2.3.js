@@ -386,7 +386,15 @@ function updateIP(ip, motorBase) {
     // FEEDBACK
     const feedback = document.getElementById("ip-feedback");
 
-        feedback.textContent = `🛈 Código ajustado para ${ip}`;
+        feedback.innerHTML = `
+            <span class="feedback-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11 10h2v7h-2zm0-4h2v2h-2zm1-4C6.48 2 2 6.48 2 12s4.48 10 
+                    10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                </svg>
+            </span>
+            Código ajustado para ${ip}
+        `;
         feedback.classList.add("show");
 
         // opcional: sumir depois de 2s
