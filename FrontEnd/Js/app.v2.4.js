@@ -53,7 +53,7 @@ function fillProductPowers(e) {
 }
 window.addEventListener("load", async () => {
     try {
-        await fetch("https://SEU_BACKEND_URL/health");
+        await fetch("https://migracao-sinamics-v90-siemens.onrender.com/health");
         console.log("backend aquecido");
     } catch (e) {
         console.log("warmup falhou");
