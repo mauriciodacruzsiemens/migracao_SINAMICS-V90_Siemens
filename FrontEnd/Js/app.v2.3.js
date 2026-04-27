@@ -51,6 +51,14 @@ function fillProductPowers(e) {
         l && (l.textContent = r ? ` ${r} ${n}` : "");
     });
 }
+window.addEventListener("load", async () => {
+    try {
+        await fetch("https://SEU_BACKEND_URL/health");
+        console.log("backend aquecido");
+    } catch (e) {
+        console.log("warmup falhou");
+    }
+});
 function selectMode(e) {
     appState.mode = e;
     let t = document.getElementById("communication-group"),
