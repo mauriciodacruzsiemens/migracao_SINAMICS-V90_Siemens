@@ -375,8 +375,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
             score += 50  
 
             warnings.append(
-                "Inércia alterada de baixa para média (característica construtiva da família 1FL2). "
-                "Pequena redução de torque nominal (4,78Nm para 4,6Nm) e potência nominal (1,5kW para 1,45kW) observada. Validar aplicação."
+                "Na migração do motor SIMOTICS 1FL6 para a família SIMOTICS 1FL2, observa-se alteração da categoria de inércia de baixa para média, característica construtiva da nova plataforma. Nesta equivalência específica, há também leve redução de torque nominal (4,78 Nm → 4,60 Nm) e potência nominal (1,50 kW → 1,45 kW). Recomenda-se validação da compatibilidade com o perfil dinâmico e os requisitos de carga da aplicação."
             )
 
         else:
@@ -398,7 +397,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
             score += 15
         else:
             score -= 20
-            warnings.append("A classe de tensão do sistema foi alterada de 200–240 V (V90) para 380–480 V (S200), conforme padrão da nova geração de acionamentos. Essa mudança exige verificação da infraestrutura elétrica, ajustes no dimensionamento de proteção e adequação da alimentação de potência.")
+            warnings.append("A classe de tensão de alimentação do sistema foi alterada de 200–240 V (V90) para 380–480 V (S200), conforme padrão da nova geração de acionamentos. Essa mudança exige verificação da infraestrutura elétrica, ajustes no dimensionamento de proteção e adequação da alimentação de potência.")
 
         if check_phase_compatibility(ref["phases_list"], cand["phases_list"]):
             score += 10
