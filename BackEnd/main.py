@@ -375,7 +375,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
             score += 50  
 
             warnings.append(
-                "Na migração do motor SIMOTICS 1FL6 para a família SIMOTICS 1FL2, observa-se alteração da categoria de inércia de baixa para média, característica construtiva da nova plataforma. Nesta equivalência específica, há também leve redução de torque nominal (4,78 Nm → 4,60 Nm) e potência nominal (1,50 kW → 1,45 kW). Recomenda-se validação da compatibilidade com o perfil dinâmico e os requisitos de carga da aplicação."
+                "Na migração do servomotor SIMOTICS 1FL6 para a família SIMOTICS 1FL2, observa-se alteração da categoria de inércia de baixa para média, característica construtiva da nova plataforma. Nesta equivalência específica, há também leve redução de torque nominal (4,78 Nm → 4,60 Nm) e potência nominal (1,50 kW → 1,45 kW). Recomenda-se validação da compatibilidade com o perfil dinâmico e os requisitos de carga da aplicação."
             )
 
         else:
