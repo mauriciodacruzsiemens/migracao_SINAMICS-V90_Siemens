@@ -76,6 +76,9 @@ def migrar(data: InputData):
 
     return result
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
 @app.options("/migrar")
 async def options_migrar():
