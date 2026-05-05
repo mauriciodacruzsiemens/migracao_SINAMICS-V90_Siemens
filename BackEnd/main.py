@@ -397,7 +397,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
             score += 15
         else:
             score -= 20
-            warnings.append("A classe de tensão de alimentação do sistema foi alterada de 200–240 V (V90) para 380–480 V (S200), conforme padrão da nova geração de acionamentos. Essa mudança exige verificação da infraestrutura elétrica, ajustes no dimensionamento de proteção e adequação da alimentação de potência.")
+            warnings.append("A classe de tensão de alimentação do sistema foi alterada de 200–240V (Sinamics V90) para 380–480V (Sinamics S200), conforme padrão da nova geração de servoacionamentos. Essa mudança exige verificação da infraestrutura elétrica, ajustes no dimensionamento de proteção e adequação da alimentação de potência.")
 
         if check_phase_compatibility(ref["phases_list"], cand["phases_list"]):
             score += 10
