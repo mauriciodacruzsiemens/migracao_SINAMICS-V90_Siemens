@@ -337,8 +337,10 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
         # =========================
         # 🔧 POTÊNCIA
         # =========================
-        if power_cand >= power_ref:
+        if power_cand == power_ref:
             score += 15
+        elif power_cand > power_ref:
+            score += 14
         else:
             if is_exception_case:
                 score += 15
@@ -349,6 +351,9 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
         # =========================
         # 🔧 TORQUE
         # =========================
+        if torque_cand == torque_ref:
+            score +=25;
+        
         if percent_torque < -0.10:
             logger.debug(f"Torque muito inferior: {torque_cand} < {torque_ref}")
             return None
