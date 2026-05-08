@@ -186,17 +186,17 @@ async function exportToExcel() {
             // cria planilha
             const ws = XLSX.utils.json_to_sheet(data);
         
-            // largura automática / ajustada
-            ws["!cols"] = [
-                { wch: 42 }, // Descrição
-                { wch: 28 }, // Article Number
-                { wch: 16 }, // Potência
-                { wch: 18 }, // Comunicação
-                { wch: 12 }, // Tensão
-                { wch: 22 }, // Torque
-                { wch: 12 }, // RPM
+             ws["!cols"] = [
+                { wch: 40 }, // Descrição
+                { wch: 20 }, // Article Number
+                { wch: 12 }, // Potência
+                { wch: 18 }, // TORQUE
+                { wch: 10 }, // Tensão
+                { wch: 14 }, // Comunicação
+                { wch: 17 }, // RPM
                 { wch: 18 }, // Altura eixo
             ];
+
         
             // workbook
             const wb = XLSX.utils.book_new();
