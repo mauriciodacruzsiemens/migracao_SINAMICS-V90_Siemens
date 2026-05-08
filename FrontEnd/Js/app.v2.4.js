@@ -156,37 +156,56 @@ async function handleSearch(e) {
 }
 async function exportToExcel() {
     await loadXLSX();
-    let { motorV90: e, motorS200: t } = appState,
-        o = [
-            {
-                Descrição: "Conjunto SINAMICS V90 + SIMOTICS 1FL6 (Atual)",
-                "Article Number Servomotor": formatMLFB(e.motor) || formatMLFB(e.mlfb) || "-",
-                "Article Number Servodrive": formatMLFB(e.drive) || "-",
-                "Pot\xeancia (kW)": e.potencia_kw || e.potencia || "-",
-                "Torque (Nm)": e.torque_nm || e.torque || "-",
-                RPM: e.velocidade_rpm || e.velocidade || "-",
-                Tensão: e.tensao || "-",
-                Fases: e.fases || "-",
-                Comunicação: e.comunicacao || "-",
-                "Altura de eixo (mm)": e.altura_eixo_mm || "-",
-            },
-            {
-                Descrição: "Conjunto SINAMICS S200 + SIMOTICS 1FL2 (Sucessor)",
-                "Article Number Servomotor": formatMLFB(appState.motorS200.motor) || formatMLFB(t.mlfb) || "-",
-                "Article Number Servodrive": formatMLFB(t.drive) || "-",
-                "Pot\xeancia (kW)": t.potencia_kw || t.potencia || "-",
-                "Torque (Nm)": t.torque_nm || t.torque || "-",
-                RPM: t.velocidade_rpm || t.velocidade || "-",
-                Tensão: t.tensao || "-",
-                Fases: t.fases || "-",
-                Comunicação: t.comunicacao || "-",
-                "Altura de eixo (mm)": t.altura_eixo_mm || "-",
-            },
-        ],
-        n = XLSX.utils.json_to_sheet(o),
-        r = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(r, n, "Resultado Migra\xe7\xe3o"), XLSX.writeFile(r, "analise_migracao_siemens.xlsx");
+
+    let { motorS200: t } = appState;
+
+    const data = [
+        {
+            Descrição: `SIMOTICS S-1FL2, ${t.inertia || "-"} inércia`,
+            "Article Number": formatMLFB(t.motor) || formatMLFB(t.mlfb) || "-",
+            "Potência [kW]": t.potencia_kw || t.potencia || "-",
+            "Torque Nominal [Nm]": t.torque_nm || t.torque || "-",
+            "Tensão [V]": "-",
+             Comunicação: "-",
+            "Torque Nominal [Nm]": t.torque_nm || t.torque || "-",
+            "Vel. Nominal [RPM]": t.velocidade_rpm || t.velocidade || "-",
+            "Altura de eixo [mm]": t.altura_eixo_mm || "-",
+        },
+        {
+            Descrição: "SINAMICS S200, Single-axis compact, Blocksize",
+            "Article Number": formatMLFB(t.drive) || "-",
+            "Potência [kW]": t.potencia_kw_drive || "-",
+            "Torque Nominal [Nm]":"-",
+            "Tensão [V]": t.tensao || "-",
+            Comunicação: t.comunicacao || "-",
+            "Vel. Nominal [RPM]":  "-",
+            "Altura de eixo [mm]": "-"
+        },
+    ];
+
+    // cria planilha
+    const ws = XLSX.utils.json_to_sheet(data);
+
+    // largura automática / ajustada
+    ws["!cols"] = [
+        { wch: 42 }, // Descrição
+        { wch: 28 }, // Article Number
+        { wch: 16 }, // Potência
+        { wch: 18 }, // Comunicação
+        { wch: 12 }, // Tensão
+        { wch: 22 }, // Torque
+        { wch: 12 }, // RPM
+        { wch: 18 }, // Altura eixo
+    ];
+
+    // workbook
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Resultado Migração");
+
+    // exporta
+    XLSX.writeFile(wb, "MLFBs_Conjunto_S200.xlsx");
 }
+
 function displayResult() {
     let { motorV90: e, motorS200: t, warnings: o } = appState;
     (document.getElementById("result-motor-v90").textContent = formatMLFB(e.motor || e.mlfb) || "-"),
