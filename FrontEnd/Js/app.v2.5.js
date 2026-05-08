@@ -183,28 +183,28 @@ async function exportToExcel() {
         },
     ];
 
-    // cria planilha
-    const ws = XLSX.utils.json_to_sheet(data);
-
-    // largura automática / ajustada
-    ws["!cols"] = [
-        { wch: 42 }, // Descrição
-        { wch: 28 }, // Article Number
-        { wch: 16 }, // Potência
-        { wch: 18 }, // Comunicação
-        { wch: 12 }, // Tensão
-        { wch: 22 }, // Torque
-        { wch: 12 }, // RPM
-        { wch: 18 }, // Altura eixo
-    ];
-
-    // workbook
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Resultado Migração");
-
-    // exporta
-    XLSX.writeFile(wb, "MLFBs_Conjunto_S200.xlsx");
-}
+            // cria planilha
+            const ws = XLSX.utils.json_to_sheet(data);
+        
+            // largura automática / ajustada
+            ws["!cols"] = [
+                { wch: 42 }, // Descrição
+                { wch: 28 }, // Article Number
+                { wch: 16 }, // Potência
+                { wch: 18 }, // Comunicação
+                { wch: 12 }, // Tensão
+                { wch: 22 }, // Torque
+                { wch: 12 }, // RPM
+                { wch: 18 }, // Altura eixo
+            ];
+        
+            // workbook
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Resultado Migração");
+        
+            // exporta
+            XLSX.writeFile(wb, "MLFBs_Conjunto_S200.xlsx");
+        }
 
 function displayResult() {
     let { motorV90: e, motorS200: t, warnings: o } = appState;
