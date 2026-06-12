@@ -51,7 +51,7 @@ def migrar(data: InputData):
     if ref is None:
         return {"erro": "Conjunto não encontrado"}
 
-    # 🔥 AGORA SEM QUALQUER LÓGICA DE IP
+  
     best = find_best_match(ref, df_s200)
 
     if best is None:
@@ -59,11 +59,11 @@ def migrar(data: InputData):
 
     result = build_result(ref, best)
 
-    # 🔍 DEBUG (OBRIGATÓRIO AGORA)
+    
     print("\n🚀 RESULTADO GERADO PELO BACKEND:")
     print(result)
 
-    # 🔥 GARANTIA DO CAMPO (TESTE CONTROLADO)
+   
     altura = result["sucessor"]["altura_eixo_mm"]
 
     if altura in [20, 30]:
