@@ -326,7 +326,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
         percent_torque = (torque_cand - torque_ref) / torque_ref
         percent_power = (power_cand - power_ref) / power_ref
 
-        # 🎯 EXCEÇÃO CONTROLADA (SEU CASO)
+        # EXCEÇÃO CONTROLADA (SEU CASO)
         is_exception_case = (
             ref_inertia == "baixa" and
             cand_inertia == "media" and
