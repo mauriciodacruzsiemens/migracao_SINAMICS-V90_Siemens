@@ -5,7 +5,7 @@ from typing import Optional, Dict, Any, Tuple, List
 
 # ============================================================
 # CONFIGURAÇÃO DE LOGGING
-# ============================================================
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 # ============================================================
 # NORMALIZAÇÕES
-# ============================================================
+
 
 
 def normalize_text(text):
@@ -326,7 +326,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
         percent_torque = (torque_cand - torque_ref) / torque_ref
         percent_power = (power_cand - power_ref) / power_ref
 
-        # EXCEÇÃO CONTROLADA (SEU CASO)
+        # EXCEÇÃO 
         is_exception_case = (
             ref_inertia == "baixa" and
             cand_inertia == "media" and
@@ -335,7 +335,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
         )
 
         # =========================
-        # 🔧 POTÊNCIA
+        # POTÊNCIA
         # =========================
         if power_cand == power_ref:
             score += 15
@@ -348,9 +348,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
                 warnings.append(
                     "Potência do motor reduzida de 1,5 kW para 1,45 kW.")
 
-        # =========================
-        # 🔧 TORQUE
-        # =========================
+      
         if torque_cand == torque_ref:
             score +=25;
         
@@ -370,8 +368,8 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
         else:
             score += 30
 
-        # =========================
-        # 🔧 INÉRCIA
+       
+        # INÉRCIA
         # =========================
         if cand_inertia == ref_inertia:
             score += 50
@@ -417,7 +415,7 @@ def calculate_score(ref: pd.Series, cand: pd.Series) -> Optional[Tuple[int, List
             score += 0
             warnings.append("Interface de comunicação diferente")
 
-        # ENCODER (REGRA CORRIGIDA)
+        # ENCODER 
         ref_enc = ref["encoder_class"]
         cand_enc = cand["encoder_class"]
 
